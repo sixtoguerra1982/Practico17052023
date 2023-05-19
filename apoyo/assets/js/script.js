@@ -1,15 +1,16 @@
 // API github
-const URL_BASE = 'https://api.github.com/users';
+const URL_BASE = 'https://api.github.com/users'
 
 // Funcion que conecta con la API github
 const request = async (url) => {
-    const response = await fetch(url);
+    const response = await fetch(url)
     const responseJson = await response.json()
-    try {
-        console.log('mostrar json', responseJson);
-    } catch (error) {
-        console.log('Error', error);
-    }
+    return responseJson
+    // try {
+    //     console.log('mostrar json', responseJson)
+    // } catch (error) {
+    //     console.log('Error', error)
+    // }
 }
 
 /* tomar usuario de la API, 
@@ -24,36 +25,43 @@ https://api.github.com/users/Nayarethnain/respos?page=1&per_page=3
 */
 
 const getUser = async (userName) => {
-    const url = `${URL_BASE}/${userName}`;
-    const response = await request(url);
+    const url = `${URL_BASE}/${userName}`
+    const response = await request(url)
     try {
-        console.log('mostrar json usuario', response);
+        console.log('mostrar json usuario', response)
     } catch (error) {
-        console.log('Error', error);
+        console.log('Error', error)
     }
 }
 
 const getRepo = async (userName, page, perPage) => {
-    const url = `${URL_BASE}/${userName}/repos?page=${page}&per_page=${perPage}`;
-    console.log('mostrar repos', url);
-    const response = await request(url);
+    const url = `${URL_BASE}/${userName}/repos?page=${page}&per_page=${perPage}`
+    console.log('mostrar repos', url)
+    const response = await request(url)
     try {
-        console.log('mostrar json repos', response);
+        refreshRepo(response[0].allow_forking)
+        console.log('mostrar json repos', response)
     } catch (error) {
-        console.log('Error', error);
+        console.log('Error', error)
     }
-
-
 }
 
-document.addEventListener('DOMContenidoLoaded', async () => {
-    await getUser('Nayaretnain')
-    await getRepo('Nayarethnain', 1, 3)
+const refreshRepo = (nameRepo) => {
+    const divRepo = document.getElementById('repositorios')
+    divRepo.innerHTML += `<h2>${nameRepo}</h2>`
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const btn = document.getElementById('btn-submit')
+
+    btn.addEventListener('click', async () => {
+        const inputName = document.getElementById('nombre').value
+        const inputPage = document.getElementById('pagina').value
+        const inputRepo = document.getElementById('repoPagina').value
+
+        await getRepo(inputName, inputPage, inputRepo)
+    })
+
+    // await getUser('Nayaretnain')
+    // await getRepo('Nayarethnain', 1, 3)
 })
-
-
-
-
-
-
-
