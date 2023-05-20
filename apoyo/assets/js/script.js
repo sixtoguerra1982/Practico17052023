@@ -39,7 +39,10 @@ const getRepo = async (userName, page, perPage) => {
     console.log('mostrar repos', url)
     const response = await request(url)
     try {
-        refreshRepo(response[0].allow_forking)
+        for (let i = 0; i < response.length; i++){
+            refreshRepo(response[i].name)
+        }
+            
         console.log('mostrar json repos', response)
     } catch (error) {
         console.log('Error', error)
