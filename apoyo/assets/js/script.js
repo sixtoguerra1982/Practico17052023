@@ -14,7 +14,7 @@ const getUser = async (userName) => {
     const response = await request(url)
 
     try {
-        refreshName(response.name, response.login, response.public_repos, response.location, response.type)
+        refreshName(response.avatar_url, response.name, response.login, response.public_repos, response.location, response.type)
         console.log('mostrar json usuario', response)
     } catch (error) {
         console.log('Error', error)
@@ -30,7 +30,7 @@ const getRepo = async (userName, page, perPage) => {
         const divRepo = document.getElementById('repositorios')
         divRepo.innerHTML = ''
         for (let i = 0; i < response.length; i++) {
-            refreshRepo(response[i].name)
+            refreshRepo(response[i].name, response[i].clone_url)
         }
         console.log('mostrar json repos', response)
     } catch (error) {
@@ -39,9 +39,10 @@ const getRepo = async (userName, page, perPage) => {
 }
 
 // FUNCION QUE AGREGA LOS DATOS DEL USUARIO AL DOM
-const refreshName = (name, login, quantity, location, type) => {
+const refreshName = (avatar, name, login, quantity, location, type) => {
     const divName = document.getElementById('usuario-info')
     divName.innerHTML = `
+        <img src="${avatar}" alt="${name}" height="200px" width="200px">
         <p>Nombre de usuario: ${name}</p>
         <p>Nombre de login: ${login}</p>
         <p>Cantidad de repositorios: ${quantity}</p>
@@ -51,9 +52,11 @@ const refreshName = (name, login, quantity, location, type) => {
 }
 
 // FUNCION QUE PINTA EL LISTADO DE REPOSITORIOS DEL USUARIO
-const refreshRepo = (nameRepo) => {
+const refreshRepo = (nameRepo, cloneURL) => {
     const divRepo = document.getElementById('repositorios')
-    divRepo.innerHTML += `<h2>${nameRepo}</h2>`
+    divRepo.innerHTML += `
+        <a href="${cloneURL}" target="_blank"><h3>${nameRepo}</h3></a>
+    `
 }
 
 // FUNCION QUE ESPERA QUE TODO EL DOM SE CARGUE Y EJECUTA EL JS Y FUNCIONES
@@ -66,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const inputPage = document.getElementById('pagina').value
         const inputRepo = document.getElementById('repoPagina').value
 
-        await getRepo(inputName, inputPage, inputRepo)
         await getUser(inputName)
+        await getRepo(inputName, inputPage, inputRepo)
     })
 })
