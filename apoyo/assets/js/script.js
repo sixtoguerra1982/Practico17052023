@@ -27,6 +27,8 @@ const getRepo = async (userName, page, perPage) => {
     console.log('mostrar repos', url)
     const response = await request(url)
     try {
+        const divRepo = document.getElementById('repositorios')
+        divRepo.innerHTML = ''
         for (let i = 0; i < response.length; i++) {
             refreshRepo(response[i].name)
         }
@@ -39,7 +41,7 @@ const getRepo = async (userName, page, perPage) => {
 // FUNCION QUE AGREGA LOS DATOS DEL USUARIO AL DOM
 const refreshName = (name, login, quantity, location, type) => {
     const divName = document.getElementById('usuario-info')
-    divName.innerHTML += `
+    divName.innerHTML = `
         <p>Nombre de usuario: ${name}</p>
         <p>Nombre de login: ${login}</p>
         <p>Cantidad de repositorios: ${quantity}</p>
