@@ -69,7 +69,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         const inputPage = document.getElementById('pagina').value
         const inputRepo = document.getElementById('repoPagina').value
 
-        await getUser(inputName)
-        await getRepo(inputName, inputPage, inputRepo)
+        // getUser(inputName)
+        // getRepo(inputName, inputPage, inputRepo)
+
+        // CONSTANTE QUE ALMACENA UNA PROMESA DE LAS FUNCIONES get
+        const resp = await new Promise.all([getUser(inputName), getRepo(inputName, inputPage, inputRepo)])
+
+        resp()
     })
 })
